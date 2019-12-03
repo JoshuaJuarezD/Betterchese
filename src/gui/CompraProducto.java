@@ -6,14 +6,61 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CompraProducto extends javax.swing.JFrame {
 
+    private File archivo;
     
     public CompraProducto() {
         initComponents();
+        
+                archivo = new File(
+            "producto.txt" );
+        if ( !archivo.exists() ){
+            try {
+                archivo.createNewFile();
+            } catch (IOException ex) {
+                
+            } // Fin try-catch
+        }
+        
+        //Lectura de archivo y llenaod de arraylist
+        ArrayList<Producto> listaProducto;
+        listaProducto = new ArrayList<>();
+        
+        try {
+            Scanner scanner = new Scanner( archivo );
+            scanner.useDelimiter(",");
+            while ( scanner.hasNext() ){
+                String    nombre  = scanner.next();
+                String  cantidad  = scanner.next();
+                
+                Producto c01 = new Producto ( nombre, cantidad);
+                listaProductos.add( c01 );
+            } // Fin while
+        } catch (FileNotFoundException ex) {
+            
+        }
+        
+        //Llenado de jtable
+        String matriz[][] = new String[ listaProductos.size()][2];
+        
+        for (int i = 0; i < listaProductos.size() ; i++) {
+            matriz[i][0] = listaProductos.get(i).getNombre();
+            matriz[i][1] = listaProductos.get(i).getCantidad();
+           
+        }
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            matriz,
+            new String [] {
+                "Nombre", "Cantidad"
+            }
+        ));
+        
     }
 
     
